@@ -39,15 +39,10 @@ class UpdateForm extends Component {
         this.setState({ address: event.target.value })
     }
 
-    onSubmit = (event) => {
-        event.preventDefault()
-        const { id } = this.state
-        if (id) {
-            this.fetchCustomerData(id) // Fetch data for the given ID
-        }
-    }
+    
 
     render() {
+
         return (
             <div className="container">
                 <h1 className="header">Update Customer Details</h1>

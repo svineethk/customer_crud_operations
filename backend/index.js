@@ -63,4 +63,18 @@ app.get("/contacts/", async (request, response) => {
         response.status(500).send({message: error.message});
     }
   });
+
+
+  app.post('/contacts/', async(request,response) => {
+    const {name,email,address} = request.body;
+    const createContactQuery = `INSERT INTO contacts(name,email,address) VALUES(?,?,?)`
+    try{
+        let result = await db.run(createContactQuery,[name,email,address]);
+        let newContactId = result.lastID;
+        response.send({message:'Contact Added Successfully',contactId:newContactId})
+    } catch (error) {
+        console.error("Error adding contact", error);
+        response.status(500).send({message: error.message});
+    }
+  })
   
