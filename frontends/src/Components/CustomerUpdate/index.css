@@ -1,7 +1,74 @@
+.container{
+    height:600px;
+    width: 1000px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.header{
+    font-family: 'Times New Roman', Times, serif;
+    color: #4B0082;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.input-container{
+    height: 80px;
+    width:380px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;  
+    align-items: center;
+}
+
+.labels{
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    color:#6A0572;
+    font-size: 22px;
+}
+
+.input{
+    height: 35px;
+    width:260px;
+    padding-left: 8px;
+    background-color: #FFFFFF;
+    border:1px solid #6C757D;
+    border-radius: 7px;
+}
+
+.submit-button{
+    height: 40px;
+    width: auto;
+    margin-left:175px;
+    border-radius: 10px;
+    color:#FFFFFF;
+    background-color: #17A2B8;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding-left:10px;
+    padding-right:10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+
 .submit-buttons{
     height: 40px;
-    width: 95px;
+    width: auto;
+    margin-left:175px;
+    border-radius: 10px;
+    color:#FFFFFF;
+    background-color: #17A2B8;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding-left:10px;
+    padding-right:10px;
+    font-family: 'Times New Roman', Times, serif;
     margin-left:75px;
     margin-top:25px;
-    border-radius: 10px;
 }
