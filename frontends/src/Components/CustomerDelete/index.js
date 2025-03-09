@@ -1,26 +1,47 @@
 import './index.css'
 import { Component } from 'react'
 
-class DeleteForm extends Component {
+class CustomerDelete extends Component {
     state = { id: '', name: '', email: '', address: '' }
 
-    fetchCustomerData = (id) => {
-        // Simulate an API call to fetch customer data by id
-        const customerData = {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            address: '123 Main St',
+    fetchCustomerData = async (event) => {
+        event.preventDefault()
+        const {id} = this.state
+        
+        
+        try{
+            const response = await fetch(`http://localhost:5000/contacts/${id}`); 
+            if(response.ok){
+                const customerData = await response.json();
+                const {name,email,address} = customerData[0];
+                this.setState({name,email,address})
+            }
+            else {
+                this.setState({ errorMessage: 'Failed to fetch data from the server'})
+            }
+        }   
+        catch(error){
+            this.setState({errorMessage: 'Something went wrong, please try again later'})
         }
-        // Simulate setting fetched data
-        this.setState({ name: customerData.name, email: customerData.email, address: customerData.address })
+
+        
     }
 
-    deleteCustomer = () => {
-        // Handle deleting the customer data here (e.g., send a DELETE request to a server)
+    deleteCustomer = async () => {
         const { id } = this.state
-        console.log('Deleting customer:', { id })
-        // Simulate a successful deletion
-        alert('Customer deleted successfully!')
+        try{
+            const response = await fetch(`http://localhost:5000/contacts/${id}`,{
+                method: 'DELETE',
+            })
+            const result = await response.json()
+            console.log(result)
+            if(result.message){
+                alert(result.message);
+                this.setState({id:'',name:'',email:"",address:""})
+            }
+        }catch(error){
+            alert(error);
+        }
     }
 
     onChangeId = (event) => {
@@ -31,15 +52,16 @@ class DeleteForm extends Component {
         event.preventDefault()
         const { id } = this.state
         if (id) {
-            this.fetchCustomerData(id) // Fetch data for the given ID
+            this.fetchCustomerData(id)
         }
     }
 
     render() {
+        const {id,name,email,address} = this.state
         return (
             <div className="container">
                 <h1 className="header">Delete Customer Details</h1>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.fetchCustomerData}>
                     <div className="input-container">
                         <label htmlFor="id" className="labels">ID</label>
                         <input
@@ -48,7 +70,7 @@ class DeleteForm extends Component {
                             id="id"
                             className="input"
                             placeholder='Enter the customer ID'
-                            value={this.state.id}
+                            value={id}
                             required
                         />
                     </div>
@@ -59,7 +81,7 @@ class DeleteForm extends Component {
                             id="name"
                             className="input"
                             placeholder='Customer Name'
-                            value={this.state.name}
+                            value={name}
                             disabled
                         />
                     </div>
@@ -70,7 +92,7 @@ class DeleteForm extends Component {
                             id="email"
                             className="input"
                             placeholder='Customer Email'
-                            value={this.state.email}
+                            value={email}
                             disabled
                         />
                     </div>
@@ -81,16 +103,16 @@ class DeleteForm extends Component {
                             id="address"
                             className="input"
                             placeholder='Customer Address'
-                            value={this.state.address}
+                            value={address}
                             disabled
                         />
                     </div>
                     <button type="submit" className="submit-button">Get Customer</button>
                 </form>
-                <button onClick={this.deleteCustomer} className="submit-button">Delete Customer</button>
+                <button onClick={this.deleteCustomer} className="submit-buttons">Delete Customer</button>
             </div>
         )
     }
 }
 
-export default DeleteForm
+export default CustomerDelete

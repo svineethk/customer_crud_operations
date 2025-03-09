@@ -1,26 +1,53 @@
 import './index.css'
 import { Component } from 'react'
 
-class UpdateForm extends Component {
+class CustomerUpdate extends Component {
     state = { id: '', name: '', email: '', address: '' }
 
-    fetchCustomerData = (id) => {
-        // Simulate an API call to fetch customer data by id
-        const customerData = {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            address: '123 Main St',
+    fetchCustomerData = async (event) => {
+        event.preventDefault()
+        const {id} = this.state
+        
+        
+        try{
+            const response = await fetch(`http://localhost:5000/contacts/${id}`); 
+            if(response.ok){
+                const customerData = await response.json();
+                const {name,email,address} = customerData[0];
+                console.log(customerData)
+                this.setState({name,email,address})
+            }
+            else {
+                this.setState({ errorMessage: 'Failed to fetch data from the server'})
+            }
+        }   
+        catch(error){
+            this.setState({errorMessage: 'Something went wrong, please try again later'})
         }
-        // Simulate setting fetched data
-        this.setState({ name: customerData.name, email: customerData.email, address: customerData.address })
+
+        
     }
 
-    updateCustomerData = () => {
-        // Handle updating the customer data here (e.g., send a PUT request to a server)
+    updateCustomerData = async() => {
         const { id, name, email, address } = this.state
-        console.log('Updating customer:', { id, name, email, address })
-        // Simulate a successful update
-        alert('Customer updated successfully!')
+        try{
+            const response = await fetch(`http://localhost:5000/contacts/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({name,email,address})
+            })
+            const result = await response.json();
+            if(result.message){
+                this.setState({id:'',name:'',email:'',address:''})
+                alert(result.message);
+            }
+            console.log(result.error)
+        }catch(error){
+            console.log(error);
+        }
+        
     }
 
     onChangeId = (event) => {
@@ -42,11 +69,11 @@ class UpdateForm extends Component {
     
 
     render() {
-
+        const { id, name, email, address } = this.state
         return (
             <div className="container">
                 <h1 className="header">Update Customer Details</h1>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.fetchCustomerData}>
                     <div className="input-container">
                         <label htmlFor="id" className="labels">ID</label>
                         <input
@@ -55,7 +82,7 @@ class UpdateForm extends Component {
                             id="id"
                             className="input"
                             placeholder='Enter the customer ID'
-                            value={this.state.id}
+                            value={id}
                             required
                         />
                     </div>
@@ -67,7 +94,7 @@ class UpdateForm extends Component {
                             id="name"
                             className="input"
                             placeholder='Customer Name'
-                            value={this.state.name}
+                            value={name}
                         />
                     </div>
                     <div className="input-container">
@@ -78,7 +105,7 @@ class UpdateForm extends Component {
                             id="email"
                             className="input"
                             placeholder='Customer Email'
-                            value={this.state.email}
+                            value={email}
                         />
                     </div>
                     <div className="input-container">
@@ -89,15 +116,15 @@ class UpdateForm extends Component {
                             id="address"
                             className="input"
                             placeholder='Customer Address'
-                            value={this.state.address}
+                            value={address}
                         />
                     </div>
                     <button type="submit" className="submit-button">Fetch Customer</button>
                 </form>
-                <button onClick={this.updateCustomerData} className="submit-button">Update Customer</button>
+                <button onClick={this.updateCustomerData} className="submit-buttons">Update Customer</button>
             </div>
         )
     }
 }
 
-export default UpdateForm
+export default CustomerUpdate

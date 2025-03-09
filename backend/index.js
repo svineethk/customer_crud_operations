@@ -38,9 +38,8 @@ app.get('/',(req,res) => {
 })
 
 
-// API 1: Get all the contacts
-app.get("/contacts/", async (request, response) => {
-    const {id} = request.query;
+app.get("/contacts/:id", async (request, response) => {
+  const { id } = request.params;
 
     let contactsQuery = "SELECT * FROM CONTACTS";
 
@@ -65,6 +64,8 @@ app.get("/contacts/", async (request, response) => {
   });
 
 
+
+
   app.post('/contacts/', async(request,response) => {
     const {name,email,address} = request.body;
     const createContactQuery = `INSERT INTO contacts(name,email,address) VALUES(?,?,?)`
@@ -78,3 +79,40 @@ app.get("/contacts/", async (request, response) => {
     }
   })
   
+
+
+  app.put('/contacts/:id/', async(request,response) => {
+    const {id} = request.params;
+    const { name, email, address } = request.body; 
+    console.log(id,name,email,address);
+    const updateContactQuery = `UPDATE CONTACTS SET name = ?, email = ?, address = ? WHERE id = ?`;
+
+    try{
+      let updateContact = await db.run(updateContactQuery,[name,email,address,id]);
+      if(updateContact === undefined){
+        response.send({message:"Invalid Id"})
+      }
+      response.send({message:"Contact Updated Successfully"})
+    }
+    catch(error){
+      console.error("Error updating contact", error);
+      response.status(500).send({message:error.message});
+    }
+  })
+
+
+  app.delete('/contacts/:id/',async(request,response) => {
+    const {id} = request.params;
+    const deleteContactQuery = `DELETE FROM CONTACTS WHERE id = ?`;
+    try{
+      let deleteContact = await db.run(deleteContactQuery,[id]);
+      if(deleteContact ===undefined){
+        response.send({message: "Invalid ID"});
+      }
+      response.send({message: "Contact Deleted Successfully"});
+    }
+    catch(error){
+      console.error("Error Deleting Contact:", error);
+      response.status(500).send({message:error.message});
+    }
+  })

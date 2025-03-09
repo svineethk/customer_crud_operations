@@ -1,16 +1,17 @@
 .container{
-    height: 500px;
+    height:600px;
     width: 1000px;
-    background-color: blueviolet;
+    background-color: #A5B68D;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 20px;
 }
 
 .header{
     font-family: 'Times New Roman', Times, serif;
-    color:goldenrod;
+    color: #4B0082;
     font-weight: bold;
     font-size: 36px;
 }
@@ -35,7 +36,7 @@
 .input{
     height: 35px;
     width:260px;
-    padding-left    : 8px;
+    padding-left: 8px;
 }
 
 .submit-button{

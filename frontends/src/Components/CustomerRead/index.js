@@ -6,12 +6,11 @@ class ReadForm extends Component {
 
     fetchCustomerData = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/contacts/?id=${id}`);
+            const response = await fetch(`http://localhost:5000/contacts/${id}`);
             
             if (response.ok) {
               const customerData = await response.json();
         
-              // If exactly one customer is found
               if (customerData.length === 1) {
                 const { name, email, address } = customerData[0];
                 this.setState({ name, email, address, errorMessage: '', contactsArray: [] });
@@ -41,7 +40,7 @@ class ReadForm extends Component {
         event.preventDefault()
         const { id } = this.state
         if (id) {
-            this.fetchCustomerData(id) // Fetch data for the given ID
+            this.fetchCustomerData(id)
         }
     }
 
