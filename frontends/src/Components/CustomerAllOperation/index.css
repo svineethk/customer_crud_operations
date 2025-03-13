@@ -1,0 +1,39 @@
+.table{
+    height: 250px;
+    width:600px;
+    border: none;
+}
+
+th, td{
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.actions{
+    border: none;
+}
+
+
+.edit{
+    height: 30px;
+    width: 70px;
+    color: peru;
+    border: 1px solid pink;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.delete{
+    height: 30px;
+    width: 70px;
+    color: crimson;
+    border: 1px solid pink;
+    border-radius: 5px;
+    cursor: pointer;
+}

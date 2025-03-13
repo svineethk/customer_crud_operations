@@ -82,3 +82,19 @@
 .active{
   background-color: springgreen;
 }
+
+
+
+.list{
+  height: 50px;
+  width:500px;
+  background-color: pink;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.operation-list{
+  list-style-type:none;
+}

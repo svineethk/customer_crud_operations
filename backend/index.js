@@ -64,6 +64,25 @@ app.get("/contacts/:id", async (request, response) => {
   });
 
 
+  app.get("/allcontacts/", async (request, response) => {
+    const { id } = request.params;
+  
+      let contactsQuery = "SELECT * FROM CONTACTS";
+  
+      try {
+          const contactsArray = await db.all(contactsQuery, [id]);
+          if(contactsArray === 0){
+              return response.status(404).send({message:"Contact not found"});
+          }
+          response.json(contactsArray);
+      }
+      catch(error){
+          console.error("Error fetching contacts", error);
+          response.status(500).send({message: error.message});
+      }
+    });
+
+
 
 
   app.post('/contacts/', async(request,response) => {
@@ -116,3 +135,31 @@ app.get("/contacts/:id", async (request, response) => {
       response.status(500).send({message:error.message});
     }
   })
+
+
+  app.delete('/deletecontacts/:id/', async (request, response) => {
+    const { id } = request.params;
+    console.log(id)
+  
+    const checkContactQuery = `SELECT * FROM CONTACTS WHERE id = ?`;
+    const contact = await db.get(checkContactQuery, [id]);
+  
+    if (!contact) {
+      return response.status(404).send({ message: "Contact not found" });
+    }
+  
+    const deleteContactQuery = `DELETE FROM CONTACTS WHERE id = ?`;
+    try {
+      const result = await db.run(deleteContactQuery, [id]);
+  
+      if (result.changes === 0) {
+        return response.status(404).send({ message: "No contact found with this ID" });
+      }
+  
+      response.send({ message: "Contact Deleted Successfully" });
+    } catch (error) {
+      console.error("Error Deleting Contact:", error);
+      response.status(500).send({ message: error.message });
+    }
+  });
+  
