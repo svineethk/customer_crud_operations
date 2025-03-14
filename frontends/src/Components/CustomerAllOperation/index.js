@@ -11,7 +11,7 @@ const CustomerAllOperation = () => {
     useEffect(() => {
         const fetchCustomerData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/allcontacts/`);
+                const response = await fetch(`http://localhost:5000/allusers/`);
                 if(response.ok){
                     const responseData = await response.json();
                     setCustomerData(responseData);
@@ -30,9 +30,11 @@ const CustomerAllOperation = () => {
     const deleteUser = (id) => {
         const deleteUserQuery = async () => {
             try{
-                const response = await fetch(`http://localhost:5000/deletecontacts/${id}`,{
+                const response = await fetch(`http://localhost:5000/deleteUser/${id}`,{
                     method: 'DELETE',
-                    'Content-Type':'application/json',
+                    headers:{
+                        'Content-Type':'application/json'
+                    }
                 })
                 if(response.ok){
                     alert('User Deleted Successfully')
@@ -46,17 +48,29 @@ const CustomerAllOperation = () => {
         deleteUserQuery()
     }
 
+    const formatDate = (dateString) => {
+        const [year, month, day] = dateString.split('-');
+        return `${day}-${month}-${year}`;
+      };
+
 
 
     return(
         <><h1>All Customer Details</h1>
-        <table className="table" border={1}>
+        <table className="table" border={0}>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Email</th>
+                    <th>Phone Number</th>
                     <th>Address</th>
+                    <th>Borrowed Money</th>
+                    <th>Borrowed Type</th>
+                    <th>Type Of Repayment</th>
+                    <th>Mode Of Repayment</th>
+                    <th>Installments</th>
+                    <th>Deadline Date</th>
+                    
                 </tr>
             </thead>
             <tbody className="table-row">
@@ -65,8 +79,14 @@ const CustomerAllOperation = () => {
                         <tr key={eachCustomer.id} >
                             <td>{eachCustomer.id}</td>
                             <td>{eachCustomer.name}</td>
-                            <td>{eachCustomer.email}</td>
+                            <td>{eachCustomer.phoneNumber}</td>
                             <td>{eachCustomer.address}</td>
+                            <td>{eachCustomer.borrowedMoney}</td>
+                            <td>{eachCustomer.borrowedType}</td>
+                            <td>{eachCustomer.typeOfRepayment}</td>
+                            <td>{eachCustomer.modeOfRepayment}</td>
+                            <td>{eachCustomer.installments}</td>
+                            <td>{formatDate(eachCustomer.deadTime)}</td>
                             <td className='actions'><button className='delete' onClick={() => deleteUser(eachCustomer.id)}>Delete</button></td>
                         </tr>
                     )

@@ -1,0 +1,21 @@
+.input-text-name{
+    height: 40px;
+    width:430px;
+    padding-left: 8px;
+    text-align: start;
+    font-family:Roboto;
+    font-weight: bold;
+    font-size: 25px;
+    color: maroon;
+}
+
+.input-containers-read{
+    height: 50px;
+    width:600px;
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}

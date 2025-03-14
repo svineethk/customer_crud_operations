@@ -40,9 +40,9 @@ class CustmerRandomOperation extends Component {
         return(
             <>
                 <div className='list-container'>
-                    {customer.map((eachOperation, index) => (<button className={`list-operation ${this.state.activeOperation === eachOperation ? 'active' : ''}`} key = {index} onClick={() => this.handleOperationClick(eachOperation)}>{eachOperation}</button>))}
+                    {customer.map((eachOperation, index) => (<button className={`list-operation ${activeOperation === eachOperation ? 'active' : ''}`} key = {index} onClick={() => this.handleOperationClick(eachOperation)}>{eachOperation}</button>))}
                 </div>
-                <div className='operation-container'>
+                <div>
                     {operationComponent}
                 </div>
             </>

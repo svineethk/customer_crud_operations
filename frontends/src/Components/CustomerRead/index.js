@@ -2,18 +2,30 @@ import './index.css'
 import { Component } from 'react'
 
 class ReadForm extends Component {
-    state = { id: '', name: '', email: '', address: '',contactsArray:[],errorMessage:'' }
+    state = {name: '',
+        phoneNumber: '',
+        address: '',
+        id: null,
+        borrowedMoney:'',
+        borrowedType:'',
+        typeOfRepayment:'',
+        modeOfRepayment:'',
+        installments:'',
+        deadTime:'',
+        errorMessage: '',}
 
     fetchCustomerData = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/contacts/${id}`);
+            const response = await fetch(`http://localhost:5000/users/${id}`);
             
             if (response.ok) {
               const customerData = await response.json();
         
               if (customerData.length === 1) {
-                const { name, email, address } = customerData[0];
-                this.setState({ name, email, address, errorMessage: '', contactsArray: [] });
+                const {name,phoneNumber,address,borrowedMoney,borrowedType,
+                    typeOfRepayment,installments,modeOfRepayment,deadTime } = customerData[0];
+                this.setState({ name,phoneNumber,address,borrowedMoney,borrowedType,
+                    typeOfRepayment,installments,modeOfRepayment,deadTime, errorMessage: '', contactsArray: [] });
               }
               else if (customerData.length > 1) {
                 this.setState({ contactsArray: customerData, errorMessage: '' });
@@ -24,10 +36,10 @@ class ReadForm extends Component {
             } else {
               this.setState({ errorMessage: 'Failed to fetch data from the server', contactsArray: [] });
             }
-          } catch (error) {
+        }catch (error) {
             this.setState({ errorMessage: 'Something went wrong, please try again later', contactsArray: [] });
           }
-        };
+    };
 
 
 
@@ -44,55 +56,74 @@ class ReadForm extends Component {
         }
     }
 
+
+    reformatDate = (dateString) => {
+        if(dateString === ""){
+            return ""
+        }
+        const [year,month,date] = dateString.split('-')
+        return `${date}/${month}/${year}`
+    }
+
     render() {
+        const {name,phoneNumber,address,borrowedMoney,borrowedType,
+            typeOfRepayment,installments,modeOfRepayment,deadTime,id} = this.state;
+        const dateByString = this.reformatDate(deadTime)
         return (
-            <div className="container">
+            <div className="first-container">
                 <h1 className="header">Read Customer Details</h1>
                 <form onSubmit={this.onSubmit}>
-                    <div className="input-container">
+                    <div className="input-containers">
                         <label htmlFor="id" className="labels">ID</label>
                         <input
-                            type="text"
+                            type="number"
                             onChange={this.onChangeId}
                             id="id"
-                            className="input"
+                            className="input-name"
                             placeholder='Enter the customer ID'
-                            value={this.state.id}
+                            value={id}
                             required
                         />
                     </div>
-                    <div className="input-container">
+                    <div className="input-containers-read">
                         <label htmlFor="name" className="labels">Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            className="input"
-                            placeholder='Customer Name'
-                            value={this.state.name}
-                            disabled
-                        />
+                        <p className='input-text-name'>{name}</p>
                     </div>
-                    <div className="input-container">
-                        <label htmlFor="email" className="labels">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            className="input"
-                            placeholder='Customer Email'
-                            value={this.state.email}
-                            disabled
-                        />
+                    <div className="input-containers-read">
+                        <label  className="labels">Phone Number</label>
+                        <p className='input-text-name'>{phoneNumber}</p>
                     </div>
-                    <div className="input-container">
-                        <label htmlFor="address" className="labels">Address</label>
-                        <input
-                            type="text"
-                            id="address"
-                            className="input"
-                            placeholder='Customer Address'
-                            value={this.state.address}
-                            disabled
-                        />
+                    <div className="input-containers-read">
+                        <label  className="labels">Address</label>
+                        <p className='input-text-name'>{address}</p>
+                    </div>
+                    <div className="input-containers-read">
+                        <label  className="labels">Borrowed Money</label>
+                        <p className='input-text-name'>{borrowedMoney}</p>
+                    </div>
+                    <div className="input-containers-read">
+                        <label  className="labels">Borrowed Money Type</label>
+                        <p className='input-text-name'>{borrowedType}</p>
+                    </div>
+                    <div className="input-containers-read">
+                        <label  className="labels">Type of Repayment</label>
+                        <p className='input-text-name'>{typeOfRepayment}</p>
+                    </div>
+                    {typeOfRepayment === "Partial"  && (
+                        <>
+                        <div className="input-containers-read">
+                            <label  className="labels">Installments</label>
+                            <p className='input-text-name'>{installments}</p>
+                        </div>
+                        <div className="input-containers-read">
+                            <label  className="labels">Mode of Repayment</label>
+                            <p className='input-text-name'>{modeOfRepayment}</p>
+                        </div>
+                        </>
+                    )}
+                    <div className="input-containers-read">
+                        <label  className="labels">DeadLine</label>
+                        <p className='input-text-name'>{dateByString}</p>
                     </div>
                     <button type="submit" className="submit-button">Get Customer</button>
                 </form>

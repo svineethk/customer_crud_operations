@@ -6,7 +6,7 @@ const path = require("path");
 
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
-const dbPath = path.join(__dirname, "contacts.db");
+const dbPath = path.join(__dirname, "users.db");
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -33,15 +33,14 @@ initializeDBAndServer()
 
 
 
-app.get('/',(req,res) => {
-    res.send("Hello World Database is connected to the server successfully")
-})
+ app.get('/',async (req,res) => {
+     res.send("Hello Vineeth Database is connected to the server successfully")})
 
 
-app.get("/contacts/:id", async (request, response) => {
+app.get("/users/:id", async (request, response) => {
   const { id } = request.params;
 
-    let contactsQuery = "SELECT * FROM CONTACTS";
+    let contactsQuery = "SELECT * FROM USERS";
 
     if (id) {
         if (isNaN(id)) {
@@ -64,13 +63,12 @@ app.get("/contacts/:id", async (request, response) => {
   });
 
 
-  app.get("/allcontacts/", async (request, response) => {
-    const { id } = request.params;
+  app.get("/allusers/", async (request, response) => {
   
-      let contactsQuery = "SELECT * FROM CONTACTS";
+      let contactsQuery = "SELECT * FROM USERS";
   
       try {
-          const contactsArray = await db.all(contactsQuery, [id]);
+          const contactsArray = await db.all(contactsQuery);
           if(contactsArray === 0){
               return response.status(404).send({message:"Contact not found"});
           }
@@ -85,12 +83,13 @@ app.get("/contacts/:id", async (request, response) => {
 
 
 
-  app.post('/contacts/', async(request,response) => {
-    const {name,email,address} = request.body;
-    const createContactQuery = `INSERT INTO contacts(name,email,address) VALUES(?,?,?)`
+  app.post('/users/', async(request,response) => {
+    const {name, phoneNumber, address,borrowedMoney,borrowedType,typeOfRepayment,modeOfRepayment,installments,deadTime } = request.body;
+    console.log(request.body)
+    const createContactQuery = `INSERT INTO users (name, phoneNumber, address, borrowedMoney, borrowedType, typeOfRepayment, modeOfRepayment, installments, deadTime) VALUES (?,?,?,?,?,?,?,?,?);`
     try{
-        let result = await db.run(createContactQuery,[name,email,address]);
-        let newContactId = result.lastID;
+        let result = await db.run(createContactQuery,[name, phoneNumber, address,borrowedMoney,borrowedType,typeOfRepayment,modeOfRepayment,installments,deadTime ]);
+        let newContactId = await result.lastID;
         response.send({message:'Contact Added Successfully',contactId:newContactId})
     } catch (error) {
         console.error("Error adding contact", error);
@@ -100,14 +99,14 @@ app.get("/contacts/:id", async (request, response) => {
   
 
 
-  app.put('/contacts/:id/', async(request,response) => {
+  app.put('/users/:id/', async(request,response) => {
     const {id} = request.params;
-    const { name, email, address } = request.body; 
-    console.log(id,name,email,address);
-    const updateContactQuery = `UPDATE CONTACTS SET name = ?, email = ?, address = ? WHERE id = ?`;
+    const {name, phoneNumber, address,borrowedMoney,borrowedType,typeOfRepayment,modeOfRepayment,installments,deadTime} = request.body;
+    const updateContactQuery = `UPDATE USERS SET name = ?, phoneNumber = ?, address = ?,borrowedMoney=?,borrowedType=?,
+    typeOfRepayment=?, modeOfRepayment=?, installments=?, deadTime=? WHERE id = ?`;
 
     try{
-      let updateContact = await db.run(updateContactQuery,[name,email,address,id]);
+      let updateContact = await db.run(updateContactQuery,[name, phoneNumber, address,borrowedMoney,borrowedType,typeOfRepayment,modeOfRepayment,installments,deadTime,id]);
       if(updateContact === undefined){
         response.send({message:"Invalid Id"})
       }
@@ -120,9 +119,9 @@ app.get("/contacts/:id", async (request, response) => {
   })
 
 
-  app.delete('/contacts/:id/',async(request,response) => {
+  app.delete('/users/:id/',async(request,response) => {
     const {id} = request.params;
-    const deleteContactQuery = `DELETE FROM CONTACTS WHERE id = ?`;
+    const deleteContactQuery = `DELETE FROM USERS WHERE id = ?`;
     try{
       let deleteContact = await db.run(deleteContactQuery,[id]);
       if(deleteContact ===undefined){
@@ -137,18 +136,18 @@ app.get("/contacts/:id", async (request, response) => {
   })
 
 
-  app.delete('/deletecontacts/:id/', async (request, response) => {
+  app.delete('/deleteUser/:id/', async (request, response) => {
     const { id } = request.params;
-    console.log(id)
+
   
-    const checkContactQuery = `SELECT * FROM CONTACTS WHERE id = ?`;
+    const checkContactQuery = `SELECT * FROM USERS WHERE id = ?`;
     const contact = await db.get(checkContactQuery, [id]);
   
     if (!contact) {
       return response.status(404).send({ message: "Contact not found" });
     }
   
-    const deleteContactQuery = `DELETE FROM CONTACTS WHERE id = ?`;
+    const deleteContactQuery = `DELETE FROM USERS WHERE id = ?`;
     try {
       const result = await db.run(deleteContactQuery, [id]);
   

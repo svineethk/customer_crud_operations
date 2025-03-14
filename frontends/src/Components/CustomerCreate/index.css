@@ -1,41 +1,64 @@
-.container{
-    height:400px;
-    width: 1000px;
-    background-color: transparent;
+.first-container{
+    height:auto;
+    width:auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
+    padding-top: 30px;
 }
+
+
+
 
 .header{
     font-family: 'Times New Roman', Times, serif;
     color: #4B0082;
     font-weight: bold;
-    font-size: 36px;
+    font-size: 30px;
+    margin: 0px;
+    padding: 0px;
 }
 
-.input-container{
-    height: 80px;
-    width:380px;
-    margin-bottom: 10px;
+.input-containers{
+    height: 75px;
+    width:600px;
+    align-self: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;  
+    justify-content: space-between;
     align-items: center;
+    margin-top: 20px;
 }
 
 .labels{
     font-family: 'Times New Roman', Times, serif;
     font-weight: bold;
     color:#6A0572;
-    font-size: 22px;
+    font-size: 18px;
+}
+
+.labels-name{
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    color:#0D3B66;
+    font-size: 18px;
 }
 
 .input{
-    height: 35px;
-    width:260px;
+    height: 15px;
+    width:50px;
+    padding-left: 8px;
+    background-color: #FFFFFF;
+    border:1px solid #6C757D;
+    border-radius: 7px;
+}
+
+
+.input-name{
+    height: 40px;
+    width:430px;
     padding-left: 8px;
     background-color: #FFFFFF;
     border:1px solid #6C757D;
@@ -44,7 +67,7 @@
 
 .submit-button{
     height: 40px;
-    width: auto;
+    width: 300px;
     margin-left:175px;
     border-radius: 10px;
     color:#FFFFFF;
