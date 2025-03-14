@@ -2,20 +2,21 @@ import './App.css';
 import {Component} from 'react'
 import CustomerRandomOperation from './Components/CustomerRandomOperation'
 import CustomerAllOperation from './Components/CustomerAllOperation'
+import CustomerDeadLineOperation from './Components/CustomerDeadLineOperation';
 
-let customerOperations = ['AllUser','RandomUser']
+let customerOperations = ['AllUser','RandomUser','DeadLines']
 
 
 class App extends Component {
-  state = {isRandomOperation:false}
+  state = {isCurrentOperation:customerOperations[0]}
 
 
   onChangeOperation = operation => {
-    this.setState({isRandomOperation: operation === "RandomUser"})
+    this.setState({isCurrentOperation: operation})
   }
 
   render(){
-    const {isRandomOperation} = this.state
+    const {isCurrentOperation} = this.state
     return(
       <div className='app-container'>
         <h1 className='app-header'>Lending User Information</h1>
@@ -27,7 +28,7 @@ class App extends Component {
                   type="radio"
                   name="customerOperation"
                   value={operation}
-                  checked={isRandomOperation ? operation === 'RandomUser' : operation === 'AllUser'}
+                  checked={isCurrentOperation === operation }
                   onChange={() => this.onChangeOperation(operation)}
                   />
                   <p className='text-header'>{operation}</p>
@@ -35,7 +36,9 @@ class App extends Component {
                 </li>
             ))}
           </ul>
-        {isRandomOperation ? <CustomerRandomOperation/> : <CustomerAllOperation/>}
+        {isCurrentOperation === 'AllUser' && <CustomerAllOperation />}
+        {isCurrentOperation === 'RandomUser' && <CustomerRandomOperation />}
+        {isCurrentOperation === 'DeadLines' && <CustomerDeadLineOperation />}
       </div>
     )
   }
